@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import { createCard} from './card.js';
+import { createCard, removeHandler, likeCard} from './card.js';
 import {initialCards} from './cards.js';
 import { openPopup, closePopup } from './modal.js';
 
@@ -16,28 +16,30 @@ const popupImage = document.querySelector('.popup__image');
 
 const popupClose = document.querySelector('.popup__close')
 
-// @todo: Функция удаления карточки
-function removeHandler (cardElement) {
-cardElement.remove();
-}; 
+const closeButtons = document.querySelectorAll(".popup__close");
+
+
 // @todo: Вывести карточки на страницу: 
-initialCards.forEach(function(item) { placesList.append(createCard(item,removeHandler));
+initialCards.forEach(function(item) { placesList.append(createCard(item,removeHandler,likeCard));
 });
 
 // функция добавления карточки
 function openAddCard () {
-  openPopup(popupAdd); 
+  openPopup(popupAdd);
+
+  
 }
 
 // функция редактирования профиля
 function openEditProfile () {
   openPopup(editProfile);
+  
 }
-
 
 
 
 
 buttonAddCard.addEventListener('click', openAddCard);
 editProfileButton.addEventListener('click', openEditProfile);
+popupClose.addEventListener('click', closePopup)
 

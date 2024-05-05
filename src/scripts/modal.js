@@ -3,8 +3,10 @@ function openPopup (element) {
 
     };
 
-function closePopup (element) {
-    element.classList.remove('.popup_is-opened');
+function closePopup () {
+   const del = document.querySelector('.popup') 
+    del.classList.remove('popup_is-opened');
+    console.log(123)
 }
     
 
