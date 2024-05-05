@@ -1,8 +1,8 @@
 import '../pages/index.css';
 import { createCard, removeHandler, likeCard} from './card.js';
 import {initialCards} from './cards.js';
-import { openPopup, closePopup } from './modal.js';
-
+/*import { openPopup, closePopup } from './modal.js';*/
+import { openPopup,} from './modal.js';
 
 
 // @todo: DOM узлы
@@ -15,8 +15,8 @@ const popupTypeImage = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup__image');
 
 const popupClose = document.querySelector('.popup__close')
+const popup = document.querySelector('.popup_is-opened')
 
-const closeButtons = document.querySelectorAll(".popup__close");
 
 
 // @todo: Вывести карточки на страницу: 
@@ -33,7 +33,7 @@ function openAddCard () {
 // функция редактирования профиля
 function openEditProfile () {
   openPopup(editProfile);
-  
+
 }
 
 
@@ -41,5 +41,14 @@ function openEditProfile () {
 
 buttonAddCard.addEventListener('click', openAddCard);
 editProfileButton.addEventListener('click', openEditProfile);
-popupClose.addEventListener('click', closePopup)
 
+/* popupClose.addEventListener('click', closePopup) */
+
+
+const close = document.querySelector('.page__content')    
+
+close.addEventListener('click', function (evt) {
+    if (evt.target.classList.contains('popup__close')) {
+      evt.currentTarget.classList.toggle('popup_is-opened'); }
+  });
+  

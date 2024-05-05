@@ -4,10 +4,12 @@ function openPopup (element) {
     };
 
 function closePopup () {
-   const del = document.querySelector('.popup') 
+    const del = document.querySelector('.popup') 
     del.classList.remove('popup_is-opened');
-    console.log(123)
-}
     
+} 
 
-export {openPopup, closePopup};
+ export {openPopup, closePopup}; 
+
+
+
