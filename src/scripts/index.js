@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, removeHandler, likeCard, openImg} from "./card.js";
+import { createCard, removeHandler, likeCard,} from "./card.js";
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
 
@@ -9,14 +9,25 @@ const popupAdd = document.querySelector(".popup_type_new-card");
 const buttonAddCard = document.querySelector(".profile__add-button");
 const editProfile = document.querySelector(".popup_type_edit");
 const editProfileButton = document.querySelector(".profile__edit-button");
+const popupImage = document.querySelector(".popup__image");
+const popupCaption = document.querySelector('.popup__caption');
+const popupTypeImage = document.querySelector(".popup_type_image");
+const formElement = document.querySelector('.popup_type_edit');
+const formElementAddCard = document.querySelector('.popup_type_new-card'); 
+const nameInput = document.querySelector('.profile__title');
+const jobInput = document.querySelector('.profile__description');
+const inputTypeName = document.querySelector('.popup__input_type_name');
+const inputTypeJob = document.querySelector('.popup__input_type_description');
+const inputCardName = document.querySelector('.popup__input_type_card-name');
+const inputCardLink = document.querySelector('.popup__input_type_url');
 
+const closeBtns = document.querySelectorAll(".popup__close");
+const popups = document.querySelectorAll(".popup");
 
 // закрытие попапа крестиком
-const closeBtns = document.querySelectorAll(".popup__close");
 closeBtns.forEach((el) => el.addEventListener("click", closePopup));
 
 // закрытие попапа кликом на оверлей
-const popups = document.querySelectorAll(".popup");
 popups.forEach(closePopupByOverley);   
 
 // функция добавления карточки
@@ -27,6 +38,8 @@ function openAddCard() {
 // функция редактирования профиля
 function openEditProfile() {
    openPopup(editProfile);
+   inputTypeName.value = nameInput.textContent;
+   inputTypeJob.value = jobInput.textContent;
 }
 
 buttonAddCard.addEventListener("click", openAddCard);
@@ -38,51 +51,31 @@ initialCards.forEach(function (item) {
 });
 
 
-
-//  Редактирование имени и информации о себе
-const formElement = document.querySelector('.popup_type_edit'); // Воспользуйтесь методом querySelector()
-// Находим поля формы в DOM
-const nameInput = document.querySelector('.profile__title')// Воспользуйтесь инструментом .querySelector()
-const jobInput = document.querySelector('.profile__description')// Воспользуйтесь инструментом .querySelector()
-const inputTypeName = document.querySelector('.popup__input_type_name')
-const inputTypeJob = document.querySelector('.popup__input_type_description')
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
 function handleFormSubmit(evt) {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-    // Получите значение полей jobInput и nameInput из свойства value
-    // Выберите элементы, куда должны быть вставлены значения полей
-    // Вставьте новые значения с помощью textContent
+    evt.preventDefault(); 
     nameInput.textContent = inputTypeName.value 
     jobInput.textContent =  inputTypeJob.value 
     closePopup();
 }
 
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handleFormSubmit); 
 
-
-
-
-const formElementAddCard = document.querySelector('.popup_type_new-card'); // Воспользуйтесь методом querySelector()
-// Находим поля формы в DOM
-const inputCardName = document.querySelector('.popup__input_type_card-name')
-const inputCardLink = document.querySelector('.popup__input_type_url')
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
 function handleFormSubmitCard(evt) {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-    // Получите значение полей jobInput и nameInput из свойства value
-    // Выберите элементы, куда должны быть вставлены значения полей
-    // Вставьте новые значения с помощью textContent
+    evt.preventDefault(); 
     const item = {
       name: inputCardName.value,
       link: inputCardLink.value
     }
     placesList.prepend(createCard(item, removeHandler, likeCard, openImg));
+    evt.target.reset();
     closePopup();
 }
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
+
 formElementAddCard.addEventListener('submit', handleFormSubmitCard); 
+
+function openImg (imgSrc, imgAlt) {
+  popupImage.src = imgSrc;
+  popupImage.alt = imgAlt;
+  popupCaption.textContent = imgAlt; 
+  openPopup(popupTypeImage);
+}
