@@ -1,10 +1,12 @@
+const del = document.querySelector('.popup.popup_is-opened') 
+const openedPopup = document.querySelector('.popup_is-opened');
+
 function openPopup (element) {
     element.classList.add('popup_is-opened');
     document.addEventListener('keydown', closeByEsc);
 };
 
 function closePopup () {
-    const del = document.querySelector('.popup.popup_is-opened') 
     del.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeByEsc)
 };
@@ -19,7 +21,6 @@ function closePopupByOverley (el) {
 
 function closeByEsc (e) {
   if (e.key === "Escape") {
-    const openedPopup = document.querySelector('.popup_is-opened');
     closePopup(openedPopup);
   }
 };
