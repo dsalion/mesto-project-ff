@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, removeHandler, likeCard,} from "./card.js";
+import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js";
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
 

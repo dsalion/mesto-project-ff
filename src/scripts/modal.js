@@ -5,7 +5,7 @@ function openPopup (element) {
 };
 
 function closePopup () {
-    const del = document.querySelector('.popup.popup_is-opened') 
+    const del = document.querySelector('.popup.popup_is-opened'); 
     del.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeByEsc)
 };
