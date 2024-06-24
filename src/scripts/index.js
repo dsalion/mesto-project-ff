@@ -2,6 +2,7 @@ import "../pages/index.css";
 import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js";
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
+import {isValid} from "./validation.js"
 
 // @todo: DOM узлы
 const placesList = document.querySelector(".places__list");
@@ -23,6 +24,9 @@ const inputCardLink = document.querySelector('.popup__input_type_url');
 
 const closeBtns = document.querySelectorAll(".popup__close");
 const popups = document.querySelectorAll(".popup");
+
+const formElement1 = document.querySelector('.popup__form');
+const formInput = formElement1.querySelector('.popup__input');
 
 // закрытие попапа крестиком
 closeBtns.forEach((el) => el.addEventListener("click", closePopup));
@@ -79,3 +83,5 @@ function openImg (imgSrc, imgAlt) {
   popupCaption.textContent = imgAlt; 
   openPopup(popupTypeImage);
 }
+
+formInput.addEventListener('input', isValid)
