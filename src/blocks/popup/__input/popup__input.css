@@ -18,6 +18,10 @@
   border-bottom-color: red;
 }
 
+.form__input-error {
+  color: red;
+}
+
 @media screen and (max-width: 568px) {
   .popup__title {
     font-size: 12px;

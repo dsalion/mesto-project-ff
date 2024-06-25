@@ -25,8 +25,7 @@ const inputCardLink = document.querySelector('.popup__input_type_url');
 const closeBtns = document.querySelectorAll(".popup__close");
 const popups = document.querySelectorAll(".popup");
 
-const formElement1 = document.querySelector('.popup__form');
-const formInput = formElement1.querySelector('.popup__input');
+
 
 // закрытие попапа крестиком
 closeBtns.forEach((el) => el.addEventListener("click", closePopup));
@@ -84,4 +83,3 @@ function openImg (imgSrc, imgAlt) {
   openPopup(popupTypeImage);
 }
 
-formInput.addEventListener('input', isValid)
