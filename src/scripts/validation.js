@@ -18,7 +18,7 @@ const hideInputError = (formElement, inputElement) => {
     inputElement.classList.remove('popup__input_type_error')
     errorElement.classList.remove('popup__input-error_active')
     errorElement.textContent ="";
-    console.log('srabotalo')
+    
 }
 
 // Функция проверяющая валидность поля
@@ -33,26 +33,37 @@ export const isValid = (formElement, inputElement) => {
 
 //добавляем слушатель всем полям ввода
 
-const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+const setEventListeners = (formElement, formConfig) => {
+    const inputList = Array.from(formElement.querySelectorAll(formConfig.inputSelector));
+    const buttonElement = formElement.querySelector(formConfig.submitButtonSelector)
 
     inputList.forEach((inputElement) => {
         inputElement,addEventListener('input', () => {
             isValid(formElement, inputElement)
+            toggleButtonState(inputList, buttonElement)
         })
     })
 }
 
 //Добавим обработчики формам
 
-const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
+const enableValidation = (formConfig) => {
+ //   const formList = Array.from(document.querySelectorAll('.popup__form'));
+ const { formSelector, inputSelector, submitButtonSelector} = formConfig
+ const formList = Array.from(document.querySelectorAll(formSelector));
     formList.forEach((formElement) => {
-        setEventListeners(formElement);
+        setEventListeners(formElement,{inputSelector, submitButtonSelector});
     })
 }
 
-enableValidation();
+enableValidation({
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+  });
 const hasInvalidInput = (inputList) => {
     return inputList.some((inputElement) => {
         return !inputElement.validity.valid;
