@@ -18,7 +18,7 @@
   border-bottom-color: red;
 }
 
-.form__input-error {
+.popup__error_visible {
   color: red;
 }
 

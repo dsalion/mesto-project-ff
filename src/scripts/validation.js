@@ -9,14 +9,14 @@ const showInputError = (formElement, inputElement, errorMessage) => {
 
     inputElement.classList.add('popup__input_type_error')
     errorElement.textContent = errorMessage;
-    errorElement.classList.add('popup__input-error_active')
+    errorElement.classList.add('popup__error_visible')
     
 }
 // Функция удаляющая класс с ошибкой
 const hideInputError = (formElement, inputElement) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove('popup__input_type_error')
-    errorElement.classList.remove('popup__input-error_active')
+    errorElement.classList.remove('popup__error_visible')
     errorElement.textContent ="";
     
 }
@@ -24,6 +24,12 @@ const hideInputError = (formElement, inputElement) => {
 // Функция проверяющая валидность поля
 
 export const isValid = (formElement, inputElement) => {
+    if (inputElement.validity.patternMismatch) {
+        inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+    } else {
+        inputElement.setCustomValidity("")
+    }
+
     if (!inputElement.validity.valid) {
         showInputError(formElement, inputElement, inputElement.validationMessage);
     } else {
@@ -36,14 +42,28 @@ export const isValid = (formElement, inputElement) => {
 const setEventListeners = (formElement, formConfig) => {
     const inputList = Array.from(formElement.querySelectorAll(formConfig.inputSelector));
     const buttonElement = formElement.querySelector(formConfig.submitButtonSelector)
-
+    toggleButtonState(inputList, buttonElement);
+    
+    inputList.forEach((inputElement) => {
+        inputElement,addEventListener('input', () => {
+            toggleButtonState(inputList, buttonElement)
+            isValid(formElement, inputElement)
+        })
+    })
+} 
+ /*const setEventListeners = (formElement) => {
+    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+    const buttonElement = formElement.querySelector('.popup__button')
+    toggleButtonState(inputList, buttonElement)
     inputList.forEach((inputElement) => {
         inputElement,addEventListener('input', () => {
             isValid(formElement, inputElement)
             toggleButtonState(inputList, buttonElement)
+            
         })
     })
-}
+} */
+
 
 //Добавим обработчики формам
 
@@ -64,13 +84,14 @@ enableValidation({
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__error_visible'
   });
-const hasInvalidInput = (inputList) => {
+
+function hasInvalidInput (inputList) {
     return inputList.some((inputElement) => {
         return !inputElement.validity.valid;
     })
 }
 
-const toggleButtonState = (inputList, buttonElement) => {
+function toggleButtonState (inputList, buttonElement)  {
     if (hasInvalidInput(inputList)) {
         buttonElement.disabled = true;
     buttonElement.classList.add('button_inactive')
@@ -80,4 +101,16 @@ const toggleButtonState = (inputList, buttonElement) => {
     }
 }
 
+export function clearValidation () {
+    const errorElements = document.querySelectorAll('.form__input-error')
+    errorElements.forEach(element => {
+        element.textContent = '';
+        
+    })
+    
+    const inputElements = document.querySelectorAll('.popup__input_type_error')
+    inputElements.forEach(element => { 
+        element.classList.remove('popup__input_type_error')
+    })
+}
 

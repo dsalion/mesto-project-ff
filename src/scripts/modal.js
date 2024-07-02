@@ -1,4 +1,4 @@
-
+import {clearValidation } from "./validation"
 function openPopup (element) {
     element.classList.add('popup_is-opened');
     document.addEventListener('keydown', closeByEsc);
@@ -8,6 +8,9 @@ function closePopup () {
     const del = document.querySelector('.popup.popup_is-opened'); 
     del.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeByEsc)
+    
+    clearValidation ()
+    
 };
 
 function closePopupByOverley (el) {
