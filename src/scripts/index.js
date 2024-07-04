@@ -3,7 +3,7 @@ import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js"
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
 import {isValid} from "./validation.js"
-import { getUserData, getInitialCards, cfg } from "./api.js";
+import { getUserData, getInitialCards, cfg, loadNewDataProfile, loadNewAvatar } from "./api.js";
 
 
 // @todo: DOM узлы
@@ -23,6 +23,11 @@ const inputTypeName = document.querySelector('.popup__input_type_name');
 const inputTypeJob = document.querySelector('.popup__input_type_description');
 const inputCardName = document.querySelector('.popup__input_type_card-name');
 const inputCardLink = document.querySelector('.popup__input_type_url');
+const avatarImage = document.querySelector('.profile__image')
+const avatarInput = document.querySelector('.popup__input_type_avatar')
+
+const profileAvatarBtn = document.querySelector(".profile__load-button")
+const popupAvatar = document.querySelector('.popup_type_avatar')
 
 const closeBtns = document.querySelectorAll(".popup__close");
 const popups = document.querySelectorAll(".popup");
@@ -40,6 +45,10 @@ function openAddCard() {
   openPopup(popupAdd);
 }
 
+function openModalNewAvatar() {
+  openPopup(popupAvatar)
+}
+
 // функция редактирования профиля
 function openEditProfile() {
    openPopup(editProfile);
@@ -49,6 +58,7 @@ function openEditProfile() {
 
 buttonAddCard.addEventListener("click", openAddCard);
 editProfileButton.addEventListener("click", openEditProfile);
+profileAvatarBtn.addEventListener('click', openModalNewAvatar);
 
 
 // @todo: Вывести карточки на страницу:
@@ -60,6 +70,10 @@ function handleFormSubmit(evt) {
     evt.preventDefault(); 
     nameInput.textContent = inputTypeName.value 
     jobInput.textContent =  inputTypeJob.value 
+    const data = { name: inputTypeName.value,
+      about: inputTypeJob.value
+    }
+    loadNewDataProfile(data)
     closePopup();
 }
 
@@ -78,11 +92,32 @@ function handleFormSubmitCard(evt) {
 
 formElementAddCard.addEventListener('submit', handleFormSubmitCard); 
 
+function handleAvatarLoad(evt) {
+  evt.preventDefault();
+  const data = {
+    avatar: avatarInput.value
+  }
+  loadNewAvatar(data);
+  reloadData()
+  closePopup();
+  
+}
+
+popupAvatar.addEventListener('submit',handleAvatarLoad)
+
+
+
 function openImg (imgSrc, imgAlt) {
   popupImage.src = imgSrc;
   popupImage.alt = imgAlt;
   popupCaption.textContent = imgAlt; 
   openPopup(popupTypeImage);
+}
+
+function loadProfileData (userInfo) {
+  avatarImage.style.backgroundImage = `url("${userInfo.avatar}")`;
+  nameInput.textContent = userInfo.name
+  jobInput.textContent = userInfo.about
 }
 
 
@@ -140,9 +175,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         placesList.append(createCard(cardOptions));
       });
-      updateProfileForm(userInfo);
+      loadProfileData(userInfo);
     })
     .catch((error) => {
       console.log(error);
     });
 });
+
+
+function reloadData() {
+  getUserData()
+  .then((userinfo) => {
+    loadProfileData(userinfo)
+  })
+}

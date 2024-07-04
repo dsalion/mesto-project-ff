@@ -43,3 +43,43 @@ export function getInitialCards() {
     });
   });
 }
+
+export function loadNewAvatar(data) {
+  return fetch(`${cfg.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: cfg.headers,
+    body: JSON.stringify({
+      name: data.name,
+      about: data.about,
+      avatar: data.avatar
+    })})
+  .then(res => {
+      if (res.ok) {
+        console.log(res);
+        return res.json();
+        
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+  })
+
+}
+
+export function loadNewDataProfile(data) {
+  return fetch(`${cfg.baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: cfg.headers,
+    body: JSON.stringify({
+      name: data.name,
+      about: data.about,
+      avatar: data.avatar
+    })})
+  .then(res => {
+      if (res.ok) {
+        console.log(res);
+        return res.json();
+        
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+  })
+
+}

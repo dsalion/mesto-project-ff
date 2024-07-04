@@ -7,7 +7,17 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
 }
+
+.profile__load-button:hover {
+  background: rgba(0, 0, 0, 0.6)
+}
+
+.profile__load-button:hover>.profile__load-button-item {
+  display: inline;
+}
+
 
 @media screen and (max-width: 740px) {
   .profile__image {
