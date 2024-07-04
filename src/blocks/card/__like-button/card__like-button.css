@@ -13,8 +13,21 @@
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
   transition: 0.3s;
+  margin-block-end: 5px;
 }
 
 .card__like-button:hover {
   opacity: 0.6;
+}
+
+.button-and-count-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__like-count {
+  line-height: 10px;
+  margin: auto;
 }

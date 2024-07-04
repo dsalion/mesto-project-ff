@@ -3,6 +3,7 @@ import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js"
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
 import {isValid} from "./validation.js"
+import { getUserData, getInitialCards, cfg } from "./api.js";
 
 
 // @todo: DOM узлы
@@ -49,11 +50,11 @@ function openEditProfile() {
 buttonAddCard.addEventListener("click", openAddCard);
 editProfileButton.addEventListener("click", openEditProfile);
 
-// @todo: Вывести карточки на страницу:
-initialCards.forEach(function (item) {
-  placesList.append(createCard(item, removeHandler, likeCard, openImg));
-});
 
+// @todo: Вывести карточки на страницу:
+/*initialCards.forEach(function (item) {
+  placesList.append(createCard(item, removeHandler, likeCard, openImg));
+});*/
 
 function handleFormSubmit(evt) {
     evt.preventDefault(); 
@@ -85,13 +86,63 @@ function openImg (imgSrc, imgAlt) {
 }
 
 
-fetch('https://nomoreparties.co/v1/wff-cohort-17/cards', {
-  headers: {
-    authorization: '39372700-6f6a-42da-8d54-aca056f2fb48'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result);
-  }); 
-  
+
+
+/*document.addEventListener("DOMContentLoaded", () => {
+ Promise.all([getInitialCards(), getUserData()])
+  .then(([cards, userInfo]) => {
+   // currentUserId = userInfo._id;
+    cards.forEach(function (cardItem) {
+      const cardOptions = {
+        card: item,
+        deleteCallback: removeHandler,
+        likeCallback: likeCard,
+        imageClickCallback: openImg,
+        
+      };
+
+      placesList.append(createCard(cardOptions));
+    });
+    updateProfileForm(userInfo);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}); */
+
+let currentUserId;
+
+document.addEventListener("DOMContentLoaded", () => {
+ 
+  Promise.all([getInitialCards(), getUserData()])
+    .then(([cards, userInfo]) => {
+      currentUserId = userInfo._id; // Убедитесь, что эта строка не закомментирована
+
+      cards.forEach(function (cardItem) {
+        const cardOptions = {
+          card: cardItem,
+          deleteCallback: (cardId, cardElement) => {
+            // Здесь должна быть логика удаления карточки
+            removeHandler(cardId).then(() => {
+              cardElement.remove();
+            }).catch(error => console.error('Error removing card:', error));
+          },
+          likeCard: (cardId, updateLikes) => {
+            // Здесь должна быть логика лайка/дизлайка
+            likeCard(cardId).then(updatedCard => {
+              updateLikes(updatedCard.likes);
+            }).catch(error => console.error('Error liking card:', error));
+          },
+          openImg: (src, alt) => {
+            openImg(src, alt);
+          }
+        };
+
+        placesList.append(createCard(cardOptions));
+      });
+      updateProfileForm(userInfo);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
