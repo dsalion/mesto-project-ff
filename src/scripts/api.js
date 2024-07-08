@@ -13,13 +13,13 @@ export function getUserData() {
   })
     .then(res => {
       if (res.ok) {
-        console.log(res);
+        //console.log(res);
         return res.json();
         
       }
       return Promise.reject(`Ошибка: ${res.status}`)
     .then((data) => {
-        console.log(data);
+        //console.log(data);
         return data;
       });
     });
@@ -32,13 +32,13 @@ export function getInitialCards() {
   })
   .then(res => {
     if (res.ok) {
-      console.log(res);
+      //console.log(res);
       return res.json();
       
     }
     return Promise.reject(`Ошибка: ${res.status}`)
   .then((data) => {
-      console.log(data);
+      //console.log(data);
       return data;
     });
   });
@@ -55,7 +55,7 @@ export function loadNewAvatar(data) {
     })})
   .then(res => {
       if (res.ok) {
-        console.log(res);
+        //console.log(res);
         return res.json();
         
       }
@@ -75,11 +75,40 @@ export function loadNewDataProfile(data) {
     })})
   .then(res => {
       if (res.ok) {
-        console.log(res);
+        //console.log(res);
         return res.json();
         
       }
       return Promise.reject(`Ошибка: ${res.status}`)
   })
 
+}
+
+export function loadNewCard(data) {
+  return fetch(`${cfg.baseUrl}/cards`, {
+    method: 'POST',
+    headers: cfg.headers,
+    body: JSON.stringify({
+      name: data.name,
+      link: data.link
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();      
+    }
+    return Promise.reject(`Ошибка: ${res.status}`)
+})}
+
+export function deleteCard (cardId) {
+  return fetch(`${cfg.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: cfg.headers,
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`)
+})
 }

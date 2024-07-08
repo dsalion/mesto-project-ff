@@ -3,7 +3,7 @@ import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js"
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
 import {isValid} from "./validation.js"
-import { getUserData, getInitialCards, cfg, loadNewDataProfile, loadNewAvatar } from "./api.js";
+import { getUserData, getInitialCards, cfg, loadNewDataProfile, loadNewAvatar, loadNewCard, deleteCard } from "./api.js";
 
 
 // @todo: DOM узлы
@@ -78,20 +78,21 @@ function handleFormSubmit(evt) {
 }
 
 formElement.addEventListener('submit', handleFormSubmit); 
-
+//ручное добавление карты (не сервер)
 function handleFormSubmitCard(evt) {
     evt.preventDefault(); 
-    const item = {
+    const data = {
       name: inputCardName.value,
       link: inputCardLink.value
     }
-    placesList.prepend(createCard(item, removeHandler, likeCard, openImg));
+    loadNewCard(data)
+    placesList.prepend(createCard(data, removeHandler, likeCard, openImg));
     evt.target.reset();
     closePopup();
 }
-
+//слушатель для кнопки сохранить при добавлении карты
 formElementAddCard.addEventListener('submit', handleFormSubmitCard); 
-
+//функция для загрузки аватара
 function handleAvatarLoad(evt) {
   evt.preventDefault();
   const data = {
@@ -102,18 +103,18 @@ function handleAvatarLoad(evt) {
   closePopup();
   
 }
-
+//слушатель для загрузки аватара
 popupAvatar.addEventListener('submit',handleAvatarLoad)
 
 
-
+//функция открытия карточки на весь экран
 function openImg (imgSrc, imgAlt) {
   popupImage.src = imgSrc;
   popupImage.alt = imgAlt;
   popupCaption.textContent = imgAlt; 
   openPopup(popupTypeImage);
 }
-
+//функция загрузки данных с сервера
 function loadProfileData (userInfo) {
   avatarImage.style.backgroundImage = `url("${userInfo.avatar}")`;
   nameInput.textContent = userInfo.name
@@ -151,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
   Promise.all([getInitialCards(), getUserData()])
     .then(([cards, userInfo]) => {
+      console.log(userInfo)
       currentUserId = userInfo._id; // Убедитесь, что эта строка не закомментирована
 
       cards.forEach(function (cardItem) {
@@ -170,19 +172,23 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           openImg: (src, alt) => {
             openImg(src, alt);
-          }
+          },
+          currentUserId: userInfo._id
         };
 
         placesList.append(createCard(cardOptions));
       });
+      
       loadProfileData(userInfo);
+      //debugger;
     })
+    
     .catch((error) => {
       console.log(error);
     });
 });
 
-
+//функция обновления данных
 function reloadData() {
   getUserData()
   .then((userinfo) => {
