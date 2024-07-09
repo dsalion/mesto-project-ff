@@ -51,23 +51,11 @@ const setEventListeners = (formElement, formConfig) => {
         })
     })
 } 
- /*const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button')
-    toggleButtonState(inputList, buttonElement)
-    inputList.forEach((inputElement) => {
-        inputElement,addEventListener('input', () => {
-            isValid(formElement, inputElement)
-            toggleButtonState(inputList, buttonElement)
-            
-        })
-    })
-} */
 
 
 //Добавим обработчики формам
 
-const enableValidation = (formConfig) => {
+export const enableValidation = (formConfig) => {
  //   const formList = Array.from(document.querySelectorAll('.popup__form'));
  const { formSelector, inputSelector, submitButtonSelector} = formConfig
  const formList = Array.from(document.querySelectorAll(formSelector));
@@ -76,14 +64,7 @@ const enableValidation = (formConfig) => {
     })
 }
 
-enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-  });
+
 
 function hasInvalidInput (inputList) {
     return inputList.some((inputElement) => {

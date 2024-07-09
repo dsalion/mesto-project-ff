@@ -2,7 +2,7 @@ import "../pages/index.css";
 import { createCard, removeHandler, likeCard, del, openedPopup} from "./card.js";
 import { initialCards } from "./cards.js";
 import { openPopup, closePopup, closePopupByOverley } from "./modal.js";
-import {isValid} from "./validation.js"
+import {isValid, enableValidation} from "./validation.js"
 import { getUserData, getInitialCards, cfg, loadNewDataProfile, loadNewAvatar, loadNewCard, deleteCard } from "./api.js";
 
 
@@ -78,7 +78,7 @@ function handleFormSubmit(evt) {
 }
 
 formElement.addEventListener('submit', handleFormSubmit); 
-//ручное добавление карты (не сервер)
+//ручное добавление карточки
 function handleFormSubmitCard(evt) {
     evt.preventDefault(); 
     const data = {
@@ -86,7 +86,19 @@ function handleFormSubmitCard(evt) {
       link: inputCardLink.value
     }
     loadNewCard(data)
-    placesList.prepend(createCard(data, removeHandler, likeCard, openImg));
+      .then((newData) => {
+        console.log(newData)
+          const cardOptions = {
+          card: newData,
+          deleteCallback: removeHandler,
+          likeCard: likeCard,
+          openImg: openImg,
+          currentUserId: newData.owner._id,
+        }
+        placesList.prepend(createCard(cardOptions));
+      })
+    
+    
     evt.target.reset();
     closePopup();
 }
@@ -98,8 +110,8 @@ function handleAvatarLoad(evt) {
   const data = {
     avatar: avatarInput.value
   }
-  loadNewAvatar(data);
-  reloadData()
+  loadNewAvatar(data) 
+   .then(() => reloadData())
   closePopup();
   
 }
@@ -124,56 +136,21 @@ function loadProfileData (userInfo) {
 
 
 
-/*document.addEventListener("DOMContentLoaded", () => {
- Promise.all([getInitialCards(), getUserData()])
-  .then(([cards, userInfo]) => {
-   // currentUserId = userInfo._id;
-    cards.forEach(function (cardItem) {
-      const cardOptions = {
-        card: item,
-        deleteCallback: removeHandler,
-        likeCallback: likeCard,
-        imageClickCallback: openImg,
-        
-      };
-
-      placesList.append(createCard(cardOptions));
-    });
-    updateProfileForm(userInfo);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}); */
-
-let currentUserId;
-
 document.addEventListener("DOMContentLoaded", () => {
  
   Promise.all([getInitialCards(), getUserData()])
     .then(([cards, userInfo]) => {
       console.log(userInfo)
-      currentUserId = userInfo._id; // Убедитесь, что эта строка не закомментирована
-
+           
       cards.forEach(function (cardItem) {
+        
         const cardOptions = {
+          
           card: cardItem,
-          deleteCallback: (cardId, cardElement) => {
-            // Здесь должна быть логика удаления карточки
-            removeHandler(cardId).then(() => {
-              cardElement.remove();
-            }).catch(error => console.error('Error removing card:', error));
-          },
-          likeCard: (cardId, updateLikes) => {
-            // Здесь должна быть логика лайка/дизлайка
-            likeCard(cardId).then(updatedCard => {
-              updateLikes(updatedCard.likes);
-            }).catch(error => console.error('Error liking card:', error));
-          },
-          openImg: (src, alt) => {
-            openImg(src, alt);
-          },
-          currentUserId: userInfo._id
+          likeCard: likeCard,
+          openImg: openImg,
+          currentUserId: userInfo._id,
+          likes: cardItem.likes,
         };
 
         placesList.append(createCard(cardOptions));
@@ -195,3 +172,12 @@ function reloadData() {
     loadProfileData(userinfo)
   })
 }
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});

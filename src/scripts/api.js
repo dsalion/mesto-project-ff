@@ -47,6 +47,7 @@ export function getInitialCards() {
 export function loadNewAvatar(data) {
   return fetch(`${cfg.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
+    cache: "no-cache",
     headers: cfg.headers,
     body: JSON.stringify({
       name: data.name,
@@ -110,5 +111,31 @@ export function deleteCard (cardId) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`)
+})
+}
+
+export function likeCardSend (cardId) {
+  return fetch(`${cfg.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: cfg.headers,
+})
+.then(res => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`)
+})
+}
+
+export function likeCardDel (cardId) {
+  return fetch(`${cfg.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: cfg.headers,
+})
+.then(res => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`)
 })
 }
