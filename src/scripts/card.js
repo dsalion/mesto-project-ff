@@ -40,14 +40,14 @@ const cardTemplate = document.querySelector('#card-template').content;
     const removeButton = cardElement.querySelector('.card__delete-button');
     const likeButton = cardElement.querySelector('.card__like-button');
     const likeCounter = cardElement.querySelector('.card__like-count');
-    //let _currentUserId = card.user._id
+    
 
   
     cardImage.src = card.link;
     cardImage.alt = card.name;
     cardTitle.textContent = card.name;
   
-    // Установка ID карточки как data-атрибута
+    
     cardElement.dataset.cardId = card._id;
     cardElement.dataset.ownerId = card.owner._id;
   

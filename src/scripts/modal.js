@@ -10,8 +10,7 @@ function closePopup () {
     document.removeEventListener('keydown', closeByEsc)
     
     clearValidation ()
-    
-};
+ };
 
 function closePopupByOverley (el) {
     el.addEventListener("click", (e) => {

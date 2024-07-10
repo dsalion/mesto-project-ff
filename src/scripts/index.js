@@ -25,10 +25,8 @@ const inputCardName = document.querySelector('.popup__input_type_card-name');
 const inputCardLink = document.querySelector('.popup__input_type_url');
 const avatarImage = document.querySelector('.profile__image')
 const avatarInput = document.querySelector('.popup__input_type_avatar')
-
 const profileAvatarBtn = document.querySelector(".profile__load-button")
 const popupAvatar = document.querySelector('.popup_type_avatar')
-
 const closeBtns = document.querySelectorAll(".popup__close");
 const popups = document.querySelectorAll(".popup");
 
@@ -43,10 +41,12 @@ popups.forEach(closePopupByOverley);
 // функция добавления карточки
 function openAddCard() {
   openPopup(popupAdd);
+  document.getElementById("new-place").reset()
 }
 
 function openModalNewAvatar() {
   openPopup(popupAvatar)
+  document.getElementById("new-avatar").reset()
 }
 
 // функция редактирования профиля
@@ -78,7 +78,7 @@ function handleFormSubmit(evt) {
 }
 
 formElement.addEventListener('submit', handleFormSubmit); 
-//ручное добавление карточки
+//добавление карточки
 function handleFormSubmitCard(evt) {
     evt.preventDefault(); 
     const data = {
@@ -99,7 +99,7 @@ function handleFormSubmitCard(evt) {
       })
     
     
-    evt.target.reset();
+    
     closePopup();
 }
 //слушатель для кнопки сохранить при добавлении карты
@@ -172,7 +172,7 @@ function reloadData() {
     loadProfileData(userinfo)
   })
 }
-
+//включение валидации
 enableValidation({
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
