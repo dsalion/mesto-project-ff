@@ -47,11 +47,11 @@ const setEventListeners = (formElement, formConfig) => {
    
     const inputList = Array.from(formElement.querySelectorAll(formConfig.inputSelector));
     const buttonElement = formElement.querySelector(formConfig.submitButtonSelector)
-    toggleButtonState(inputList, buttonElement);
+    toggleButtonState(inputList, buttonElement, formConfig);
     
     inputList.forEach((inputElement) => {
         inputElement,addEventListener('input', () => {
-            toggleButtonState(inputList, buttonElement)
+            toggleButtonState(inputList, buttonElement, formConfig)
             isValid(formElement, inputElement, formConfig)
         })
     })
@@ -76,17 +76,18 @@ function hasInvalidInput (inputList) {
     })
 }
 
-function toggleButtonState (inputList, buttonElement)  {
+function toggleButtonState (inputList, buttonElement, formConfig)  {
+    //debugger
     if (hasInvalidInput(inputList)) {
         buttonElement.disabled = true;
-    buttonElement.classList.add('button_inactive')
+    buttonElement.classList.add(formConfig.inactiveButtonClass)
     } else {
         buttonElement.disabled = false;
-    buttonElement.classList.remove('button_inactive')
+    buttonElement.classList.remove(formConfig.inactiveButtonClass)
     }
 }
 
-export function clearValidation () {
+/* export function clearValidation () {
     const errorElements = document.querySelectorAll('.form__input-error')
     errorElements.forEach(element => {
         element.textContent = '';
@@ -97,5 +98,13 @@ export function clearValidation () {
     inputElements.forEach(element => { 
         element.classList.remove('popup__input_type_error')
     })
+} */
+export function clearValidation(formElement, formConfig) {
+    const inputList = Array.from(formElement.querySelectorAll(formConfig.inputSelector))
+    const buttonElement = formElement.querySelector(formConfig.submitButtonSelector)
+    
+    inputList.forEach((inputElement) => hideInputError(formElement, inputElement, formConfig))
+    toggleButtonState(inputList, buttonElement, formConfig)
+   // buttonElement.disabled = true;
+   // buttonElement.classList.add(formConfig.inactiveButtonClass)
 }
-

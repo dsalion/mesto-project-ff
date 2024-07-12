@@ -6,23 +6,19 @@ export const cfg = {
     }
 };
 
+function getResponseData(res) {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`)
+  }
+  return res.json();
+}
+
 // Функция для получения информации о пользователе
 export function getUserData() {
   return fetch(`${cfg.baseUrl}/users/me`, {
     headers: cfg.headers
   })
-    .then(res => {
-      if (res.ok) {
-        //console.log(res);
-        return res.json();
-        
-      }
-      return Promise.reject(`Ошибка: ${res.status}`)
-    .then((data) => {
-        //console.log(data);
-        return data;
-      });
-    });
+    .then(getResponseData);
 
 }
 
@@ -30,18 +26,7 @@ export function getInitialCards() {
   return fetch(`${cfg.baseUrl}/cards`, {
     headers: cfg.headers
   })
-  .then(res => {
-    if (res.ok) {
-      //console.log(res);
-      return res.json();
-      
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  .then((data) => {
-      //console.log(data);
-      return data;
-    });
-  });
+  .then(getResponseData);
 }
 
 export function loadNewAvatar(data) {
@@ -54,14 +39,7 @@ export function loadNewAvatar(data) {
       about: data.about,
       avatar: data.avatar
     })})
-  .then(res => {
-      if (res.ok) {
-        //console.log(res);
-        return res.json();
-        
-      }
-      return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(getResponseData)
 
 }
 
@@ -74,14 +52,7 @@ export function loadNewDataProfile(data) {
       about: data.about,
       avatar: data.avatar
     })})
-  .then(res => {
-      if (res.ok) {
-        //console.log(res);
-        return res.json();
-        
-      }
-      return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(getResponseData)
 
 }
 
@@ -94,24 +65,14 @@ export function loadNewCard(data) {
       link: data.link
     })
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();      
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-})}
+  .then(getResponseData)}
 
 export function deleteCard (cardId) {
   return fetch(`${cfg.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: cfg.headers,
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-})
+  .then(getResponseData)
 }
 
 export function likeCardSend (cardId) {
@@ -119,12 +80,7 @@ export function likeCardSend (cardId) {
     method: "PUT",
     headers: cfg.headers,
 })
-.then(res => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`)
-})
+.then(getResponseData)
 }
 
 export function likeCardDel (cardId) {
@@ -132,10 +88,5 @@ export function likeCardDel (cardId) {
     method: "DELETE",
     headers: cfg.headers,
 })
-.then(res => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`)
-})
+.then(getResponseData)
 }
