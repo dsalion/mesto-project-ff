@@ -81,10 +81,10 @@ function openModalNewAvatar() {
 
 // функция редактирования профиля
 function openEditProfile() {
-  clearValidation(formTypeProfile, formConfig);
   openPopup(editProfile);
   inputTypeName.value = nameInput.textContent;
   inputTypeJob.value = jobInput.textContent;
+  clearValidation(formTypeProfile, formConfig);
 }
 
 buttonAddCard.addEventListener("click", () => {
@@ -115,10 +115,10 @@ function handleFormProfileSubmit(evt) {
     .then((newData) => {
       nameInput.textContent = newData.name;
       jobInput.textContent = newData.about;
-      changingButtonStatus(formTypeProfile, false);
       closePopup(popupProfile);
     })
-    .catch((error) => console.log("Ошибка при обновлении профиля:", error));
+    .catch((error) => {console.log("Ошибка при обновлении профиля:", error)})
+    .finally (() => {changingButtonStatus(formTypeProfile, false)})
 }
 
 formTypeProfile.addEventListener("submit", handleFormProfileSubmit);
@@ -132,8 +132,7 @@ function handleFormSubmitCard(evt) {
   };
   loadNewCard(data)
     .then((newData) => {
-      changingButtonStatus(formTypePlace, false);
-      const cardOptions = {
+        const cardOptions = {
         card: newData,
         deleteCallback: removeHandler,
         likeCard: likeCard,
@@ -143,7 +142,8 @@ function handleFormSubmitCard(evt) {
       placesList.prepend(createCard(cardOptions));
       closePopup(popupAddCard);
     })
-    .catch((error) => console.log("Ошибка при добавлении карточки:", error));
+    .catch((error) => console.log("Ошибка при добавлении карточки:", error))
+    .finally (() => {changingButtonStatus(formTypeProfile, false)})
 }
 //слушатель для кнопки сохранить при добавлении карты
 formTypePlace.addEventListener("submit", handleFormSubmitCard);
@@ -157,10 +157,10 @@ function handleAvatarLoad(evt) {
   loadNewAvatar(data)
     .then((userInfo) => {
       avatarImage.style.backgroundImage = `url("${userInfo.avatar}")`;
-      changingButtonStatus(formTypeAvatar, false);
       closePopup(popupAvatar);
     })
-    .catch((error) => console.log("Ошибка при обновлении аватарки:", error));
+    .catch((error) => console.log("Ошибка при обновлении аватарки:", error))
+    .finally (() => {changingButtonStatus(formTypeProfile, false)})
 }
 //слушатель для загрузки аватара
 formTypeAvatar.addEventListener("submit", handleAvatarLoad);

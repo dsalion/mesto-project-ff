@@ -22,9 +22,12 @@ const showInputError = (
   inputElement.classList.add(formConfig.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(formConfig.errorClass);
+  
 };
 // Функция удаляющая класс с ошибкой
 const hideInputError = (formElement, inputElement, formConfig) => {
+  
+  //debugger
   const {
     formSelector,
     inputSelector,
@@ -37,6 +40,7 @@ const hideInputError = (formElement, inputElement, formConfig) => {
   inputElement.classList.remove(formConfig.inputErrorClass);
   errorElement.classList.remove(formConfig.errorClass);
   errorElement.textContent = "";
+  inputElement.setCustomValidity(""); 
 };
 
 // Функция проверяющая валидность поля
@@ -66,6 +70,7 @@ export const isValid = (formElement, inputElement, formConfig) => {
     );
   } else {
     hideInputError(formElement, inputElement, formConfig);
+    
   }
 };
 
